@@ -1,16 +1,16 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import {StyleSheet, Text, View} from 'react-native';
+import React from 'react';
 
-type Props = {}
+type Props = {};
 
 const Plus = (props: Props) => {
   return (
     <View>
       <Text>Plus</Text>
     </View>
-  )
-}
+  );
+};
 
-export default Plus
+export default Plus;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

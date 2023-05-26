@@ -2,6 +2,9 @@ import * as React from 'react';
 import {Image, TouchableOpacity} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {getHeaderTitle} from '@react-navigation/elements';
+
+import Header from '../components/Header/Header';
 
 import Explore from '../screens/Home/Explore';
 import Plus from '../screens/Home/Plus';
@@ -10,14 +13,14 @@ import More from '../screens/Home/More';
 import ExploreIcon from '../assets/icons/explore.svg';
 import MoreIcon from '../assets/icons/more.svg';
 const PlusIcon = (
-    <Image
-      source={require('../assets/icons/portal.png')}
-      style={{
-        width: 73,
-        height: 77,
-        marginTop: -20,
-      }}
-    />
+  <Image
+    source={require('../assets/icons/portal.png')}
+    style={{
+      width: 73,
+      height: 77,
+      marginTop: -20,
+    }}
+  />
 );
 
 const Tab = createBottomTabNavigator();
@@ -26,6 +29,10 @@ export default () => {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
+        header: ({navigation, route, options}) => {
+          const title = getHeaderTitle(options, route.name);
+          return <Header title={title} style={options.headerStyle} />;
+        },
         tabBarIcon: ({focused}) => {
           let icon;
           switch (route.name) {
@@ -79,7 +86,7 @@ export default () => {
           shadowColor: 'black',
           shadowRadius: 5,
           shadowOpacity: 0.1,
-          
+
           // Android Shadow
           elevation: 30,
         },
@@ -99,7 +106,13 @@ export default () => {
           tabBarIcon: () => PlusIcon,
           tabBarLabel: () => null,
           tabBarButton(props) {
-            return <TouchableOpacity {...props} style={{width: 73}} activeOpacity={.8} />;
+            return (
+              <TouchableOpacity
+                {...props}
+                style={{width: 73}}
+                activeOpacity={0.8}
+              />
+            );
           },
         }}
       />
