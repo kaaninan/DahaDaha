@@ -10,7 +10,6 @@ const MyTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: 'rgb(255, 255, 255)',
     background: 'white',
   },
 };
