@@ -14,7 +14,7 @@ type Props = {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Header = (props: Props) => {
   return (
-    <View style={[styles.container, {marginTop: useSafeAreaInsets().top}]}>
+    <View style={[styles.container, {marginTop: useSafeAreaInsets().top + 10}]}>
       <View style={styles.logoContainer}>
         <Logo />
       </View>
@@ -30,7 +30,7 @@ export default Header;
 
 const styles = StyleSheet.create({
   container: {
-    height: 60,
+    height: 40,
     flexDirection: 'row',
     paddingHorizontal: 15,
   },
