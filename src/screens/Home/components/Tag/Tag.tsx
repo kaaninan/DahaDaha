@@ -18,6 +18,7 @@ type Props = {
   title: string;
   selected?: boolean;
   onPress: (id: number) => void;
+  selectable?: boolean;
 };
 
 const Tag = (props: Props) => {
@@ -48,7 +49,10 @@ const Tag = (props: Props) => {
         onPressOut={onPressOut}
         style={[
           styles.container,
-          {borderColor: props.selected ? '#F40000' : '#ECEEEF'},
+          {
+            borderColor:
+              props.selected && props.selectable ? '#F40000' : '#ECEEEF',
+          },
         ]}
         activeOpacity={1}>
         <FastImage

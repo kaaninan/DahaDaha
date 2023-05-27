@@ -46,12 +46,14 @@ export interface Promotion {
   Unavailable: boolean;
   Unvisible: boolean;
   ListButtonText: string;
+  Hide: boolean;
 }
 
 const Home = (props: Props) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [tags, setTags] = useState<TagState[]>();
   const [promotions, setPromotions] = useState<Promotion[]>([] as Promotion[]);
+  const [keyCarosuel, setKeyCarosuel] = useState<number>(0);
 
   const getData = async () => {
     try {
@@ -81,6 +83,7 @@ const Home = (props: Props) => {
     // Order by Rank
     json = json.sort((a: TagJSON, b: TagJSON) => a.Rank - b.Rank);
     json = json.map((tag: TagState) => {
+      tag.IsSelectable = true;
       tag.IsSelected = false;
       tag.IconSource = {uri: tag.IconUrl};
       return tag;
@@ -93,6 +96,7 @@ const Home = (props: Props) => {
       IconSource: require('../../assets/icons/search.png'),
       Rank: 0,
       IsSelected: false,
+      IsSelectable: false,
     });
 
     setTags(json);
@@ -110,16 +114,17 @@ const Home = (props: Props) => {
     //   },
     // );
     // let json = await response.json();
-    // // console.log(JSON.stringify(json));
 
     // json = JSON.stringify(json);
     // // Base64 Decode
     // json = Buffer.from(json, 'utf-8').toString('base64');
     // // json = JSON.parse(json);
-    // console.log(json);
 
     let rev = Buffer.from(promotionsJSON, 'base64').toString('utf-8');
     let jsonRev = JSON.parse(rev);
+    jsonRev.map((promotion: Promotion) => {
+      promotion.Hide = false;
+    });
     setPromotions(jsonRev);
   };
 
@@ -134,11 +139,41 @@ const Home = (props: Props) => {
       return tag;
     });
     setTags(newTags);
+
+    // Filter selected tag
+    let selectedTags = newTags?.filter(
+      (tag: TagState) => tag.IsSelected === true,
+    );
+
+    let selectedTag = null;
+    if (selectedTags?.length) {
+      selectedTag = selectedTags[0];
+    }
+
+    if (selectedTag != null && selectedTag.Id !== 0) {
+      let filterText = selectedTag.Name;
+
+      promotions.map((promotion: Promotion) => {
+        if (promotion.Title.includes(filterText)) {
+          promotion.Hide = false;
+        } else if (promotion.SeoName.includes(filterText)) {
+          promotion.Hide = false;
+        } else {
+          promotion.Hide = true;
+        }
+      });
+
+      setKeyCarosuel(keyCarosuel + 1);
+    } else {
+      promotions.map((promotion: Promotion) => {
+        promotion.Hide = false;
+      });
+      setKeyCarosuel(keyCarosuel + 1);
+    }
   };
 
   useEffect(() => {
     getData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -166,13 +201,18 @@ const Home = (props: Props) => {
                   source={tag.IconSource}
                   selected={tag.IsSelected}
                   onPress={onPressTag}
+                  selectable={tag.IsSelectable}
                 />
               ))}
             </ScrollView>
           </View>
 
           {/* CAROUSEL */}
-          <CarouselContainer data={promotions} navigation={props.navigation} />
+          <CarouselContainer
+            key={keyCarosuel}
+            data={promotions}
+            navigation={props.navigation}
+          />
         </>
       )}
     </View>

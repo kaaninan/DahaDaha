@@ -27,6 +27,8 @@ const Index = (props: Props) => {
     props.navigation.navigate('Promo', {id: data.Id, seoName: data.SeoName});
   };
 
+  const visibleData = props.data.filter(item => item.Hide === false);
+
   return (
     <View style={styles.container}>
       <Carousel
@@ -42,7 +44,7 @@ const Index = (props: Props) => {
           parallaxScrollingOffset: 70,
         }}
         scrollAnimationDuration={400}
-        data={props.data}
+        data={visibleData}
         renderItem={data => {
           return (
             <Item index={data.index} data={data.item} onPress={navigate} />
@@ -55,14 +57,14 @@ const Index = (props: Props) => {
             flexDirection: 'row',
             marginBottom: 40,
           }}>
-          {props.data.map((item, index) => {
+          {visibleData.map((item, index) => {
             return (
               <PaginationItem
                 backgroundColor={item.PromotionCardColor}
                 animValue={progressValue}
                 index={index}
                 key={index}
-                length={props.data.length}
+                length={visibleData.length}
               />
             );
           })}

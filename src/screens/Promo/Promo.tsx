@@ -1,19 +1,19 @@
 import {
-  Dimensions,
   ScrollView,
   SafeAreaView,
   StyleSheet,
   Text,
   View,
   ActivityIndicator,
+  Image,
 } from 'react-native';
+import {decode} from 'html-entities';
 import React, {useEffect} from 'react';
 import FastImage from 'react-native-fast-image';
-import {decode} from 'html-entities';
 import LinearGradient from 'react-native-linear-gradient';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import BackButton from '../../components/Header/BackButton';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Button from './components/Button';
 
 type Props = {
@@ -48,16 +48,14 @@ type Detail = {
 const Promo = (props: Props) => {
   const [loading, setLoading] = React.useState<boolean>(true);
   const [detail, setDetail] = React.useState<Detail>({} as Detail);
+  const [aspectRatio, setAspectRatio] = React.useState<number>(1);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     getInfo(props.route.params.id);
   }, []);
 
-  // get useSafeAreaInsets().top
-  const insets = useSafeAreaInsets();
-
   const getInfo = async (id: number) => {
-    console.log(id);
     let response = await fetch(
       `https://api.extrazone.com/promotions?Id=${id}`,
       {
@@ -69,10 +67,15 @@ const Promo = (props: Props) => {
       },
     );
     let json = await response.json();
+    // Clean HTML Tags
     json.Description = decode(cleanText(json.Description));
     json.Title = decode(cleanText(json.Title));
-    setDetail(json);
-    setLoading(false);
+    // Calculate Aspect Ratio
+    Image.getSize(json.ImageUrl, (width, height) => {
+      setAspectRatio(width / height);
+      setDetail(json);
+      setLoading(false);
+    });
   };
 
   const cleanText = (title: string) => {
@@ -116,7 +119,7 @@ const Promo = (props: Props) => {
               paddingBottom: 50,
             }}>
             {/* Image Container */}
-            <View style={styles.containerImage}>
+            <View style={{aspectRatio: aspectRatio}}>
               {/* Image */}
               <View style={styles.containerImageMask}>
                 <FastImage
@@ -128,7 +131,7 @@ const Promo = (props: Props) => {
                     width: '100%',
                     height: '100%',
                   }}
-                  resizeMode={FastImage.resizeMode.cover}
+                  resizeMode={FastImage.resizeMode.contain}
                 />
               </View>
               {/* Logo Container */}
@@ -178,16 +181,8 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
 
-  containerImage: {
-    // flex: 1,
-    // width: '100%',
-    height: Dimensions.get('window').height / 2,
-    // backgroundColor: 'green',
-  },
-
   containerImageMask: {
     flex: 1,
-    // height: 200,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 120,
     overflow: 'hidden',
