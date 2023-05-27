@@ -33,15 +33,17 @@
 - `yarn ios` -- (`react-native run-ios`) Build the iOS App (requires a MacOS computer).
 - `yarn android` -- (`react-native run-android`) Build the Android App.
 
-### Test Deep Link
+### Linting
 
-iOS
+- `yarn lint` -- Run eslint.
+
+### Test Deep Linking
+
 ```bash
+// For iOS
 npx uri-scheme open dahadaha://campaign/guess-the-flavor-promo-2023/70 --ios
-```
 
-Android
-```bash
+// For Android
 npx uri-scheme open dahadaha://campaign/guess-the-flavor-promo-2023/70 --android
 ```
 
