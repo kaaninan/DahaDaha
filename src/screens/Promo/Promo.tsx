@@ -10,10 +10,11 @@ import React, {useEffect} from 'react';
 import {Promotion} from '../Home/Explore';
 import FastImage from 'react-native-fast-image';
 import {decode} from 'html-entities';
+import LinearGradient from 'react-native-linear-gradient';
 
-import BackLayer from '../../assets/path132.svg';
 import BackButton from '../../components/Header/BackButton';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import Button from './components/Button';
 
 type Props = {
   navigation: any;
@@ -68,33 +69,7 @@ const Promo = (props: Props) => {
   };
 
   const cleanText = (title: string) => {
-    let newStr = title.replace(/<\/?[^>]+(>|$)/g, '');
-
-    // Convert special html characters to normal text öçşiğüÖÇŞİĞÜ
-    // newStr = newStr.replace(/&ouml;/g, 'ö');
-    // newStr = newStr.replace(/&ccedil;/g, 'ç');
-    // newStr = newStr.replace(/&thorn;/g, 'ş');
-    // newStr = newStr.replace(/&igrave;/g, 'i');
-    // newStr = newStr.replace(/&uuml;/g, 'ü');
-    // newStr = newStr.replace(/&Ouml;/g, 'Ö');
-    // newStr = newStr.replace(/&Ccedil;/g, 'Ç');
-    // newStr = newStr.replace(/&THORN;/g, 'Ş');
-    // newStr = newStr.replace(/&Igrave;/g, 'İ');
-    // newStr = newStr.replace(/&Uuml;/g, 'Ü');
-    // newStr = newStr.replace(/&amp;/g, '&');
-    // newStr = newStr.replace(/&apos;/g, "'");
-    // newStr = newStr.replace(/&quot;/g, '"');
-    // newStr = newStr.replace(/&ldquo;/g, '"');
-    // newStr = newStr.replace(/&rdquo;/g, '"');
-    // newStr = newStr.replace(/&rsquo;/g, "'");
-    // newStr = newStr.replace(/&lsquo;/g, "'");
-    // newStr = newStr.replace(/&ndash;/g, '-');
-    // newStr = newStr.replace(/&mdash;/g, '-');
-    // newStr = newStr.replace(/&nbsp;/g, ' ');
-    // newStr = newStr.replace(/&hellip;/g, '...');
-    // newStr = newStr.replace(/&copy;/g, '©');
-
-    return newStr;
+    return title.replace(/<\/?[^>]+(>|$)/g, '');
   };
 
   useEffect(() => {
@@ -106,6 +81,21 @@ const Promo = (props: Props) => {
       <View style={[styles.containerBack, {top: 15 + useSafeAreaInsets().top}]}>
         <BackButton onPress={() => props.navigation.goBack()} />
       </View>
+
+      <View style={[styles.containerButton]}>
+        <LinearGradient
+          colors={['rgba(255, 255, 255, 0.1)', '#FFFFFF']}
+          style={{flex: 1, justifyContent: 'flex-end'}}>
+          <Button
+            style={{
+              marginHorizontal: 15,
+              marginBottom: useSafeAreaInsets().bottom + 15,
+            }}
+            title={decode(cleanText(data.BrandPromotionCardParticipationText))}
+          />
+        </LinearGradient>
+      </View>
+
       <ScrollView
         style={styles.container}
         contentContainerStyle={{
@@ -161,6 +151,15 @@ const styles = StyleSheet.create({
   containerBack: {
     position: 'absolute',
     left: 15,
+    zIndex: 10,
+  },
+
+  containerButton: {
+    position: 'absolute',
+    height: 130,
+    bottom: 0,
+    left: 0,
+    right: 0,
     zIndex: 10,
   },
 

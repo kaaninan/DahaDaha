@@ -8,6 +8,8 @@ import {
   View,
   TouchableOpacity,
   Text,
+  Platform,
+  Pressable,
 } from 'react-native';
 import {
   AnimateProps,
@@ -81,11 +83,15 @@ const Item: React.FC<Props> = props => {
     });
   };
 
+  // Gesture-Handler: on iOS we use TouchableWithoutFeedback because of the bug
+  const PressComponent =
+    Platform.OS === 'ios' ? TouchableWithoutFeedback : Pressable;
+
   return (
     <Animated.View
       style={[styles.containerMain, animatedStyle]}
       {...animatedViewProps}>
-      <TouchableWithoutFeedback
+      <PressComponent
         containerStyle={{flex: 1}}
         style={{flex: 1}}
         onPress={() => props.onPress(props.data)}
@@ -167,7 +173,7 @@ const Item: React.FC<Props> = props => {
             </Text>
           </TouchableOpacity>
         </View>
-      </TouchableWithoutFeedback>
+      </PressComponent>
     </Animated.View>
   );
 };
