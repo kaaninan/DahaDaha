@@ -24,7 +24,7 @@ const Index = (props: Props) => {
   const progressValue = useSharedValue<number>(0);
 
   const navigate = (data: Promotion) => {
-    props.navigation.navigate('Promo', {data});
+    props.navigation.navigate('Promo', {id: data.Id, seoName: data.SeoName});
   };
 
   return (

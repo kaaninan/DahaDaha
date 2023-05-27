@@ -5,9 +5,9 @@ import {
   StyleSheet,
   Text,
   View,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect} from 'react';
-import {Promotion} from '../Home/Explore';
 import FastImage from 'react-native-fast-image';
 import {decode} from 'html-entities';
 import LinearGradient from 'react-native-linear-gradient';
@@ -46,11 +46,18 @@ type Detail = {
 };
 
 const Promo = (props: Props) => {
-  const data: Promotion = props.route.params.data;
-
+  const [loading, setLoading] = React.useState<boolean>(true);
   const [detail, setDetail] = React.useState<Detail>({} as Detail);
 
+  useEffect(() => {
+    getInfo(props.route.params.id);
+  }, []);
+
+  // get useSafeAreaInsets().top
+  const insets = useSafeAreaInsets();
+
   const getInfo = async (id: number) => {
+    console.log(id);
     let response = await fetch(
       `https://api.extrazone.com/promotions?Id=${id}`,
       {
@@ -64,79 +71,87 @@ const Promo = (props: Props) => {
     let json = await response.json();
     json.Description = decode(cleanText(json.Description));
     json.Title = decode(cleanText(json.Title));
-    // console.log(json.Description);
     setDetail(json);
+    setLoading(false);
   };
 
   const cleanText = (title: string) => {
+    if (title === undefined) {
+      return '';
+    }
     return title.replace(/<\/?[^>]+(>|$)/g, '');
   };
 
-  useEffect(() => {
-    getInfo(data.Id);
-  }, []);
-
   return (
     <SafeAreaView style={styles.container}>
-      <View style={[styles.containerBack, {top: 15 + useSafeAreaInsets().top}]}>
+      <View style={[styles.containerBack, {top: 15 + insets.top}]}>
         <BackButton onPress={() => props.navigation.goBack()} />
       </View>
 
-      <View style={[styles.containerButton]}>
-        <LinearGradient
-          colors={['rgba(255, 255, 255, 0.1)', '#FFFFFF']}
-          style={{flex: 1, justifyContent: 'flex-end'}}>
-          <Button
-            style={{
-              marginHorizontal: 15,
-              marginBottom: useSafeAreaInsets().bottom + 15,
-            }}
-            title={decode(cleanText(data.BrandPromotionCardParticipationText))}
-          />
-        </LinearGradient>
-      </View>
-
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={{
-          // paddingTop: useSafeAreaInsets().top,
-          paddingBottom: 50,
-        }}>
-        {/* Image Container */}
-        <View style={styles.containerImage}>
-          {/* Image */}
-          <View style={styles.containerImageMask}>
-            <FastImage
-              source={{
-                uri: data.ImageUrl,
-                priority: FastImage.priority.normal,
-              }}
-              style={{
-                width: '100%',
-                height: '100%',
-              }}
-              resizeMode={FastImage.resizeMode.cover}
-            />
-          </View>
-          {/* Logo Container */}
-          <FastImage
-            source={{
-              uri: data.BrandIconUrl,
-              priority: FastImage.priority.normal,
-            }}
-            style={styles.containerLogo}
-            resizeMode={FastImage.resizeMode.contain}
-          />
-
-          {/* Remaining Text */}
-          <View style={styles.containerRemainingText}>
-            <Text style={styles.textRemaining}>{data.RemainingText}</Text>
-          </View>
+      {loading ? (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ActivityIndicator />
         </View>
+      ) : (
+        <>
+          <View style={[styles.containerButton]}>
+            <LinearGradient
+              colors={['rgba(255, 255, 255, 0.1)', '#FFFFFF']}
+              style={{flex: 1, justifyContent: 'flex-end'}}>
+              <Button
+                style={{
+                  marginHorizontal: 15,
+                  marginBottom: insets.bottom > 0 ? 30 : 15,
+                }}
+                title={decode(
+                  cleanText(detail.BrandPromotionCardParticipationText),
+                )}
+              />
+            </LinearGradient>
+          </View>
 
-        <Text style={styles.textTitle}>{detail.Title}</Text>
-        <Text style={styles.textDesc}>{detail.Description}</Text>
-      </ScrollView>
+          <ScrollView
+            style={styles.container}
+            contentContainerStyle={{
+              paddingBottom: 50,
+            }}>
+            {/* Image Container */}
+            <View style={styles.containerImage}>
+              {/* Image */}
+              <View style={styles.containerImageMask}>
+                <FastImage
+                  source={{
+                    uri: detail.ImageUrl,
+                    priority: FastImage.priority.normal,
+                  }}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                  }}
+                  resizeMode={FastImage.resizeMode.cover}
+                />
+              </View>
+              {/* Logo Container */}
+              <FastImage
+                source={{
+                  uri: detail.BrandIconUrl,
+                  priority: FastImage.priority.normal,
+                }}
+                style={styles.containerLogo}
+                resizeMode={FastImage.resizeMode.contain}
+              />
+
+              {/* Remaining Text */}
+              <View style={styles.containerRemainingText}>
+                <Text style={styles.textRemaining}>{detail.RemainingText}</Text>
+              </View>
+            </View>
+
+            <Text style={styles.textTitle}>{detail.Title}</Text>
+            <Text style={styles.textDesc}>{detail.Description}</Text>
+          </ScrollView>
+        </>
+      )}
     </SafeAreaView>
   );
 };

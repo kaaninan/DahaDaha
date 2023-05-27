@@ -248,6 +248,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Helvetica',
     fontSize: 14,
     fontWeight: '700',
+    lineHeight: 20,
     textAlign: 'center',
     color: '#1D1E1C',
   },
