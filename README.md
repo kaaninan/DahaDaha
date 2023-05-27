@@ -1,6 +1,9 @@
 # DahaDaha Mobile App
 
-![DahaDaha](./SS.jpeg)
+|        iOS         |        Android        |
+| :----------------: | :-------------------: |
+| ![](./ss-ios.jpeg) | ![](./ss-android.png) |
+
 
 ## Prerequisites
 
@@ -41,3 +44,6 @@ Android
 ```bash
 npx uri-scheme open dahadaha://campaign/guess-the-flavor-promo-2023/70 --android
 ```
+
+### Known Issues
+- Since there is no API for filtering and the Promotions Data is limited, the filtering process is simple.
