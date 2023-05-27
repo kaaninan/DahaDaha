@@ -1,5 +1,10 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import React from 'react';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 import ProfileIcon from '../../assets/icons/profile.svg';
 
@@ -9,16 +14,38 @@ type Props = {
 };
 
 const Profile = (props: Props) => {
+  const animatedValue = useSharedValue(1);
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{scale: animatedValue.value}],
+    };
+  });
+
+  const onPressIn = () => {
+    animatedValue.value = withTiming(0.98, {
+      duration: 100,
+    });
+  };
+
+  const onPressOut = () => {
+    animatedValue.value = withTiming(1, {
+      duration: 100,
+    });
+  };
+
   return (
-    <TouchableOpacity
-      activeOpacity={0.7}
-      style={[
-        styles.container,
-        {backgroundColor: props.loggedIn ? '#F40000' : '#1D1E1C'},
-      ]}>
-      <ProfileIcon />
-      {props.online && <View style={styles.badge} />}
-    </TouchableOpacity>
+    <Animated.View style={[animatedStyle]}>
+      <Pressable
+        onPressIn={onPressIn}
+        onPressOut={onPressOut}
+        style={[
+          styles.container,
+          {backgroundColor: props.loggedIn ? '#F40000' : '#1D1E1C'},
+        ]}>
+        <ProfileIcon />
+        {props.online && <View style={styles.badge} />}
+      </Pressable>
+    </Animated.View>
   );
 };
 

@@ -153,7 +153,7 @@ const Home = (props: Props) => {
       ) : (
         <>
           {/* TAGS */}
-          <View>
+          <View style={{zIndex: 2}}>
             <ScrollView
               style={styles.tagScrollContainer}
               contentContainerStyle={{paddingRight: 20}}
@@ -196,6 +196,6 @@ const styles = StyleSheet.create({
   tagScrollContainer: {
     paddingHorizontal: 15,
     paddingTop: 20,
-    paddingBottom: 10,
+    zIndex: 3,
   },
 });

@@ -26,7 +26,7 @@ const Index = (props: Props) => {
     <View style={styles.container}>
       <Carousel
         width={PAGE_WIDTH}
-        style={{flex: 1, marginBottom: 40}}
+        style={{flex: 1}}
         loop={false}
         pagingEnabled={true}
         snapEnabled={true}
@@ -36,27 +36,19 @@ const Index = (props: Props) => {
         }
         mode="parallax"
         modeConfig={{
-          parallaxScrollingScale: 0.89,
-          parallaxScrollingOffset: 50,
+          parallaxScrollingScale: 0.85,
+          parallaxScrollingOffset: 70,
         }}
         data={props.data}
         renderItem={data => {
-          return (
-            <Item
-              index={data.index}
-              backgroundColor={data.item.PromotionCardColor}
-              data={data.item}
-            />
-          );
+          return <Item index={data.index} data={data.item} />;
         }}
       />
       {progressValue && (
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'space-between',
             marginBottom: 40,
-            alignSelf: 'center',
           }}>
           {props.data.map((item, index) => {
             return (
@@ -133,7 +125,7 @@ const PaginationItem: React.FC<{
           height: width,
           borderRadius: 50,
           overflow: 'hidden',
-          marginHorizontal: 2,
+          marginHorizontal: 3,
         },
       ]}>
       {/* <Animated.View
@@ -156,5 +148,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    marginTop: -20,
   },
 });

@@ -1,5 +1,10 @@
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {Pressable, StyleSheet, Text} from 'react-native';
 import React from 'react';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 type Props = {
   title: string;
@@ -7,13 +12,35 @@ type Props = {
 };
 
 const Login = (props: Props) => {
+  const animatedValue = useSharedValue(1);
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{scale: animatedValue.value}],
+    };
+  });
+
+  const onPressIn = () => {
+    animatedValue.value = withTiming(0.98, {
+      duration: 100,
+    });
+  };
+
+  const onPressOut = () => {
+    animatedValue.value = withTiming(1, {
+      duration: 100,
+    });
+  };
+
   return (
-    <TouchableOpacity
-      style={styles.container}
-      activeOpacity={0.7}
-      onPress={props.onPress}>
-      <Text style={styles.text}>{props.title}</Text>
-    </TouchableOpacity>
+    <Animated.View style={[animatedStyle]}>
+      <Pressable
+        style={styles.container}
+        onPress={props.onPress}
+        onPressIn={onPressIn}
+        onPressOut={onPressOut}>
+        <Text style={styles.text}>{props.title}</Text>
+      </Pressable>
+    </Animated.View>
   );
 };
 

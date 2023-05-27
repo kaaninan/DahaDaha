@@ -6,6 +6,11 @@ import {
 } from 'react-native';
 import React from 'react';
 import FastImage, {Source} from 'react-native-fast-image';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 type Props = {
   id: number;
@@ -16,22 +21,45 @@ type Props = {
 };
 
 const Tag = (props: Props) => {
+  const animatedValue = useSharedValue(1);
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{scale: animatedValue.value}],
+    };
+  });
+
+  const onPressIn = () => {
+    animatedValue.value = withTiming(0.95, {
+      duration: 100,
+    });
+  };
+
+  const onPressOut = () => {
+    animatedValue.value = withTiming(1, {
+      duration: 100,
+    });
+  };
+
   return (
-    <TouchableOpacity
-      onPress={() => props.onPress(props.id)}
-      style={[
-        styles.container,
-        {borderColor: props.selected ? '#F40000' : '#ECEEEF'},
-      ]}
-      activeOpacity={1}>
-      <FastImage
-        key={props.id}
-        style={styles.icon}
-        source={props.source}
-        resizeMode={FastImage.resizeMode.contain}
-      />
-      <Text style={styles.text}>{props.title}</Text>
-    </TouchableOpacity>
+    <Animated.View style={[animatedStyle]}>
+      <TouchableOpacity
+        onPress={() => props.onPress(props.id)}
+        onPressIn={onPressIn}
+        onPressOut={onPressOut}
+        style={[
+          styles.container,
+          {borderColor: props.selected ? '#F40000' : '#ECEEEF'},
+        ]}
+        activeOpacity={1}>
+        <FastImage
+          key={props.id}
+          style={styles.icon}
+          source={props.source}
+          resizeMode={FastImage.resizeMode.contain}
+        />
+        <Text style={styles.text}>{props.title}</Text>
+      </TouchableOpacity>
+    </Animated.View>
   );
 };
 
