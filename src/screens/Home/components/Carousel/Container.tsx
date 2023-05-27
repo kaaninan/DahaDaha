@@ -83,22 +83,6 @@ const PaginationItem: React.FC<{
   const {animValue, index, backgroundColor} = props;
   const width = 10;
 
-  // Dots will be used for pagination
-  // For every page we will have a dot that width is 10
-  // For active page we will have a dot that width is 20
-  // When page is changing we will animate the width of the dot
-  // We will use interpolate function to animate the width of the dot
-  // For first page animValue will be 0 and 0.5
-  // For second page animValue will be 0.5 and 1.5
-  // For third page animValue will be 1.5 and 2.5
-  // For fourth page animValue will be 2.5 and 3.5
-  // For fifth page animValue will be 3.5 and 4.5
-
-  // For backgroundColor
-  // If item is Selected we will use backgroundColor
-  // If item is not Selected we will use #D8D8D8
-  // BackgroundColor also will be animated
-
   const animStyle = useAnimatedStyle(() => {
     const widthVal = interpolate(
       animValue.value,
@@ -134,18 +118,8 @@ const PaginationItem: React.FC<{
           overflow: 'hidden',
           marginHorizontal: 3,
         },
-      ]}>
-      {/* <Animated.View
-        style={[
-          {
-            borderRadius: 50,
-            backgroundColor,
-            flex: 1,
-          },
-          animStyle,
-        ]}
-      /> */}
-    </Animated.View>
+      ]}
+    />
   );
 };
 

@@ -1,9 +1,7 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import React from 'react';
 
-type Props = {};
-
-const DahaCuzdan = (props: Props) => {
+const DahaCuzdan = () => {
   return (
     <View>
       <Text>DahaCuzdan</Text>
@@ -12,5 +10,3 @@ const DahaCuzdan = (props: Props) => {
 };
 
 export default DahaCuzdan;
-
-const styles = StyleSheet.create({});

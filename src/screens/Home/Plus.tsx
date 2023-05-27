@@ -1,9 +1,7 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
 import React from 'react';
 
-type Props = {};
-
-const Plus = (props: Props) => {
+const Plus = () => {
   return (
     <View>
       <Text>Plus</Text>
@@ -12,5 +10,3 @@ const Plus = (props: Props) => {
 };
 
 export default Plus;
-
-const styles = StyleSheet.create({});

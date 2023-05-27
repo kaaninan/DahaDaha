@@ -116,7 +116,7 @@ const Promo = (props: Props) => {
           <ScrollView
             style={styles.container}
             contentContainerStyle={{
-              paddingBottom: 50,
+              paddingBottom: 100,
             }}>
             {/* Image Container */}
             <View style={{aspectRatio: aspectRatio}}>

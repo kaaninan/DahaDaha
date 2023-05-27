@@ -30,6 +30,7 @@ interface TagJSON {
 interface TagState extends TagJSON {
   IsSelected: boolean;
   IconSource: object;
+  IsSelectable: boolean;
 }
 
 export interface Promotion {
@@ -70,15 +71,14 @@ const Home = (props: Props) => {
   };
 
   const getTags = async () => {
-    // let response = await fetch('https://api.extrazone.com/tags/list', {
-    //   method: 'GET',
-    //   headers: {
-    //     'X-Country-Id': 'TR',
-    //     'X-Language-Id': 'TR',
-    //   },
-    // });
-    // let json = await response.json();
-    let json = JSON.parse(tagsJSON);
+    let response = await fetch('https://api.extrazone.com/tags/list', {
+      method: 'GET',
+      headers: {
+        'X-Country-Id': 'TR',
+        'X-Language-Id': 'TR',
+      },
+    });
+    let json = await response.json();
 
     // Order by Rank
     json = json.sort((a: TagJSON, b: TagJSON) => a.Rank - b.Rank);
@@ -103,29 +103,21 @@ const Home = (props: Props) => {
   };
 
   const getPromotions = async () => {
-    // let response = await fetch(
-    //   'https://api.extrazone.com/promotions/list?Channel=PWA',
-    //   {
-    //     method: 'GET',
-    //     headers: {
-    //       'X-Country-Id': 'TR',
-    //       'X-Language-Id': 'TR',
-    //     },
-    //   },
-    // );
-    // let json = await response.json();
-
-    // json = JSON.stringify(json);
-    // // Base64 Decode
-    // json = Buffer.from(json, 'utf-8').toString('base64');
-    // // json = JSON.parse(json);
-
-    let rev = Buffer.from(promotionsJSON, 'base64').toString('utf-8');
-    let jsonRev = JSON.parse(rev);
-    jsonRev.map((promotion: Promotion) => {
+    let response = await fetch(
+      'https://api.extrazone.com/promotions/list?Channel=PWA',
+      {
+        method: 'GET',
+        headers: {
+          'X-Country-Id': 'TR',
+          'X-Language-Id': 'TR',
+        },
+      },
+    );
+    let json = await response.json();
+    json.map((promotion: Promotion) => {
       promotion.Hide = false;
     });
-    setPromotions(jsonRev);
+    setPromotions(json);
   };
 
   // OnPress Tag

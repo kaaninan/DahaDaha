@@ -11,6 +11,7 @@ import ProfileIcon from '../../assets/icons/profile.svg';
 type Props = {
   loggedIn: boolean;
   online: boolean;
+  onPress: () => void;
 };
 
 const Profile = (props: Props) => {
@@ -38,6 +39,7 @@ const Profile = (props: Props) => {
       <Pressable
         onPressIn={onPressIn}
         onPressOut={onPressOut}
+        onPress={props.onPress}
         style={[
           styles.container,
           {backgroundColor: props.loggedIn ? '#F40000' : '#1D1E1C'},

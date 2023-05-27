@@ -12,7 +12,7 @@ import More from '../screens/Home/More';
 
 import ExploreIcon from '../assets/icons/explore.svg';
 import MoreIcon from '../assets/icons/more.svg';
-const PlusIcon = (
+const PlusIcon = () => (
   <Image
     source={require('../assets/icons/portal.png')}
     style={{
@@ -25,14 +25,22 @@ const PlusIcon = (
 
 const Tab = createBottomTabNavigator();
 
+const CustomHeader = ({route, options}: {route: any; options: any}) => {
+  const title = getHeaderTitle(options, route.name);
+  return <Header title={title} style={options.headerStyle} />;
+};
+
+const CustomTabBarButton = (props: any) => {
+  return (
+    <TouchableOpacity {...props} style={{width: 73}} activeOpacity={0.8} />
+  );
+};
+
 export default () => {
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
-        header: ({navigation, route, options}) => {
-          const title = getHeaderTitle(options, route.name);
-          return <Header title={title} style={options.headerStyle} />;
-        },
+        header: CustomHeader,
         tabBarIcon: ({focused}) => {
           let icon;
           switch (route.name) {
@@ -103,17 +111,9 @@ export default () => {
         name="Plus"
         component={Plus}
         options={{
-          tabBarIcon: () => PlusIcon,
+          tabBarIcon: PlusIcon,
           tabBarLabel: () => null,
-          tabBarButton(props) {
-            return (
-              <TouchableOpacity
-                {...props}
-                style={{width: 73}}
-                activeOpacity={0.8}
-              />
-            );
-          },
+          tabBarButton: CustomTabBarButton,
         }}
       />
       <Tab.Screen
