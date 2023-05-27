@@ -18,12 +18,13 @@ import {
   withTiming,
 } from 'react-native-reanimated';
 import Animated from 'react-native-reanimated';
+import FastImage from 'react-native-fast-image';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {decode} from 'html-entities';
 
 import BackLayer from '../../../../assets/backLayer.svg';
-import FastImage from 'react-native-fast-image';
-
-import {Promotion} from '../../Explore';
+import {Promotion} from '../../../../types/types';
+import {theme} from '../../../../styles/theme';
 
 interface Props extends AnimateProps<ViewProps> {
   style?: StyleProp<ViewStyle>;
@@ -32,9 +33,8 @@ interface Props extends AnimateProps<ViewProps> {
   onPress: (data: Promotion) => void;
 }
 
-const Item: React.FC<Props> = props => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const {style, index, ...animatedViewProps} = props;
+const Item = (props: Props) => {
+  const {...animatedViewProps} = props;
 
   const originalWidth = 304.16882;
   const originalHeight = 48.379974;
@@ -43,27 +43,9 @@ const Item: React.FC<Props> = props => {
 
   const cleanText = (title: string) => {
     let newStr = title.replace(/<\/?[^>]+(>|$)/g, '');
-
-    // Convert special html characters to normal text öçşiğüÖÇŞİĞÜ
-    newStr = newStr.replace(/&ouml;/g, 'ö');
-    newStr = newStr.replace(/&ccedil;/g, 'ç');
-    newStr = newStr.replace(/&thorn;/g, 'ş');
-    newStr = newStr.replace(/&igrave;/g, 'i');
-    newStr = newStr.replace(/&uuml;/g, 'ü');
-    newStr = newStr.replace(/&Ouml;/g, 'Ö');
-    newStr = newStr.replace(/&Ccedil;/g, 'Ç');
-    newStr = newStr.replace(/&THORN;/g, 'Ş');
-    newStr = newStr.replace(/&Igrave;/g, 'İ');
-    newStr = newStr.replace(/&Uuml;/g, 'Ü');
-    newStr = newStr.replace(/&amp;/g, '&');
-    newStr = newStr.replace(/&apos;/g, "'");
-    newStr = newStr.replace(/&quot;/g, '"');
-
-    return newStr;
+    return decode(newStr);
   };
 
-  // When view onPressIn, it will be animated to 0.95
-  // When view onPressOut, it will be animated to 1
   const animatedValue = useSharedValue(1);
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -89,7 +71,7 @@ const Item: React.FC<Props> = props => {
 
   return (
     <Animated.View
-      style={[styles.containerMain, animatedStyle]}
+      style={[styles.container, animatedStyle]}
       {...animatedViewProps}>
       <PressComponent
         containerStyle={{flex: 1}}
@@ -115,7 +97,7 @@ const Item: React.FC<Props> = props => {
         </View>
 
         {/* Container */}
-        <View style={styles.container}>
+        <View style={styles.containerMain}>
           {/* Image Container */}
           <View style={styles.containerImage}>
             {/* Image */}
@@ -128,9 +110,7 @@ const Item: React.FC<Props> = props => {
                 style={{
                   width: '100%',
                   height: '100%',
-                  // aspectRatio: 1.04,
                   backgroundColor: 'purple',
-                  // fill the container
                 }}
                 resizeMode={FastImage.resizeMode.cover}
               />
@@ -181,13 +161,13 @@ const Item: React.FC<Props> = props => {
 export default Item;
 
 const styles = StyleSheet.create({
-  containerMain: {
+  container: {
     flex: 1,
   },
 
-  container: {
+  containerMain: {
     flex: 1,
-    borderColor: '#F4F6F5',
+    borderColor: theme.colors.border,
     borderWidth: 2,
     borderRadius: 20,
     backgroundColor: 'white',
@@ -220,7 +200,7 @@ const styles = StyleSheet.create({
   },
 
   containerRemainingText: {
-    backgroundColor: '#1D1E1C',
+    backgroundColor: theme.colors.dark,
     borderRadius: 100,
     position: 'absolute',
     bottom: 10,
@@ -228,7 +208,7 @@ const styles = StyleSheet.create({
   },
 
   textRemaining: {
-    fontFamily: 'Helvetica',
+    fontFamily: theme.font.primary,
     fontSize: 15,
     fontWeight: '400',
     letterSpacing: -0.47,
@@ -244,20 +224,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 30,
   },
+
   textTitle: {
-    fontFamily: 'Helvetica',
+    fontFamily: theme.font.primary,
     fontSize: 14,
     fontWeight: '700',
     lineHeight: 20,
     textAlign: 'center',
-    color: '#1D1E1C',
+    color: theme.colors.dark,
   },
 
   containerButton: {
     zIndex: 2,
   },
+
   textButton: {
-    fontFamily: 'Helvetica',
+    fontFamily: theme.font.primary,
     fontSize: 14,
     fontWeight: '700',
     textAlign: 'center',

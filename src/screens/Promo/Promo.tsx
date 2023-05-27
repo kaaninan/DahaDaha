@@ -12,70 +12,53 @@ import React, {useEffect} from 'react';
 import FastImage from 'react-native-fast-image';
 import LinearGradient from 'react-native-linear-gradient';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-
+import * as Animatable from 'react-native-animatable';
 import BackButton from '../../components/Header/BackButton';
 import Button from './components/Button';
+import {theme} from '../../styles/theme';
+import {Detail} from '../../types/types';
 
 type Props = {
   navigation: any;
   route: any;
 };
 
-type Detail = {
-  BrandIconColor: string;
-  BrandIconUrl: string;
-  BrandPromotionCardParticipationText: string;
-  Description: string;
-  EndDate: Date;
-  Id: number;
-  ImageUrl: string;
-  CountryTimeZone: number;
-  RemainingText: string;
-  StartDate: Date;
-  Title: string;
-  Type: string;
-  ScenarioType: string;
-  SeoName: string;
-  Unavailable: boolean;
-  IsMapAvailable: boolean;
-  Unvisible: boolean;
-  DetailButtonText: string;
-  ListButtonText: null;
-  PromotionDetailItemAreas: any[];
-  NextFlowConfigurations: object;
-};
-
 const Promo = (props: Props) => {
   const [loading, setLoading] = React.useState<boolean>(true);
+  const [error, setError] = React.useState<Boolean>(false);
   const [detail, setDetail] = React.useState<Detail>({} as Detail);
   const [aspectRatio, setAspectRatio] = React.useState<number>(1);
   const insets = useSafeAreaInsets();
 
   useEffect(() => {
-    getInfo(props.route.params.id);
+    getData(props.route.params.id);
   }, []);
 
-  const getInfo = async (id: number) => {
-    let response = await fetch(
-      `https://api.extrazone.com/promotions?Id=${id}`,
-      {
-        method: 'GET',
-        headers: {
-          'X-Country-Id': 'TR',
-          'X-Language-Id': 'TR',
+  const getData = async (id: number) => {
+    try {
+      let response = await fetch(
+        `https://api.extrazone.com/promotions?Id=${id}`,
+        {
+          method: 'GET',
+          headers: {
+            'X-Country-Id': 'TR',
+            'X-Language-Id': 'TR',
+          },
         },
-      },
-    );
-    let json = await response.json();
-    // Clean HTML Tags
-    json.Description = decode(cleanText(json.Description));
-    json.Title = decode(cleanText(json.Title));
-    // Calculate Aspect Ratio
-    Image.getSize(json.ImageUrl, (width, height) => {
-      setAspectRatio(width / height);
-      setDetail(json);
-      setLoading(false);
-    });
+      );
+      let json = await response.json();
+      // Clean HTML Tags
+      json.Description = decode(cleanText(json.Description));
+      json.Title = decode(cleanText(json.Title));
+      // Calculate Aspect Ratio
+      Image.getSize(json.ImageUrl, (width, height) => {
+        setAspectRatio(width / height);
+        setDetail(json);
+        setLoading(false);
+      });
+    } catch {
+      setError(true);
+    }
   };
 
   const cleanText = (title: string) => {
@@ -91,7 +74,11 @@ const Promo = (props: Props) => {
         <BackButton onPress={() => props.navigation.goBack()} />
       </View>
 
-      {loading ? (
+      {error ? (
+        <View style={styles.containerError}>
+          <Text>Something went wrong</Text>
+        </View>
+      ) : loading ? (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <ActivityIndicator />
         </View>
@@ -101,15 +88,20 @@ const Promo = (props: Props) => {
             <LinearGradient
               colors={['rgba(255, 255, 255, 0.1)', '#FFFFFF']}
               style={{flex: 1, justifyContent: 'flex-end'}}>
-              <Button
-                style={{
-                  marginHorizontal: 15,
-                  marginBottom: insets.bottom > 0 ? 30 : 15,
-                }}
-                title={decode(
-                  cleanText(detail.BrandPromotionCardParticipationText),
-                )}
-              />
+              <Animatable.View
+                animation="fadeInUp"
+                duration={500}
+                useNativeDriver>
+                <Button
+                  style={{
+                    marginHorizontal: 15,
+                    marginBottom: insets.bottom > 0 ? 30 : 15,
+                  }}
+                  title={decode(
+                    cleanText(detail.BrandPromotionCardParticipationText),
+                  )}
+                />
+              </Animatable.View>
             </LinearGradient>
           </View>
 
@@ -166,6 +158,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
+  containerError: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   containerBack: {
     position: 'absolute',
     left: 15,
@@ -199,7 +197,7 @@ const styles = StyleSheet.create({
   },
 
   containerRemainingText: {
-    backgroundColor: '#1D1E1C',
+    backgroundColor: theme.colors.dark,
     borderRadius: 100,
     position: 'absolute',
     bottom: 10,
@@ -207,32 +205,32 @@ const styles = StyleSheet.create({
   },
 
   textRemaining: {
-    fontFamily: 'Helvetica',
+    fontFamily: theme.font.primary,
     fontSize: 15,
     fontWeight: '400',
     letterSpacing: -0.47,
     textTransform: 'lowercase',
     paddingHorizontal: 10,
     paddingVertical: 5,
-    color: 'white',
+    color: theme.colors.light,
   },
 
   textTitle: {
-    fontFamily: 'Helvetica',
+    fontFamily: theme.font.primary,
     fontSize: 26,
     fontWeight: '700',
     letterSpacing: -0.2,
-    color: '#1D1E1C',
+    color: theme.colors.dark,
     paddingHorizontal: 15,
     paddingTop: 30,
   },
 
   textDesc: {
-    fontFamily: 'Helvetica',
+    fontFamily: theme.font.primary,
     fontSize: 14,
     fontWeight: '400',
     lineHeight: 22,
-    color: '#1D1E1C',
+    color: theme.colors.dark,
     padding: 15,
   },
 });

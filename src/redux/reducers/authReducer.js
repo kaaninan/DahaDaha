@@ -1,8 +1,4 @@
-export type RootState = {
-  loggedIn: Boolean,
-};
-
-const initialState: RootState = {
+const initialState = {
   loggedIn: false,
 };
 

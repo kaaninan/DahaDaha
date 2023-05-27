@@ -2,14 +2,13 @@ import * as React from 'react';
 import {Image, TouchableOpacity} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {getHeaderTitle} from '@react-navigation/elements';
 
 import Header from '../components/Header/Header';
-
 import Explore from '../screens/Home/Explore';
 import Plus from '../screens/Home/Plus';
 import More from '../screens/Home/More';
 
+// ICONS
 import ExploreIcon from '../assets/icons/explore.svg';
 import MoreIcon from '../assets/icons/more.svg';
 const PlusIcon = () => (
@@ -25,9 +24,8 @@ const PlusIcon = () => (
 
 const Tab = createBottomTabNavigator();
 
-const CustomHeader = ({route, options}: {route: any; options: any}) => {
-  const title = getHeaderTitle(options, route.name);
-  return <Header title={title} style={options.headerStyle} />;
+const CustomHeader = () => {
+  return <Header />;
 };
 
 const CustomTabBarButton = (props: any) => {
@@ -51,10 +49,6 @@ export default () => {
                   style={{marginTop: 6}}
                 />
               );
-              break;
-
-            case 'Plus':
-              // icon = PlusIcon;
               break;
 
             case 'More':
@@ -104,7 +98,6 @@ export default () => {
         component={Explore}
         options={({}) => ({
           title: 'Keşfet',
-          // headerShown: false,
         })}
       />
       <Tab.Screen

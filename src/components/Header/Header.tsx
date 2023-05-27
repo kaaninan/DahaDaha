@@ -1,20 +1,14 @@
-import {Animated, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import Logo from '../../assets/logo.svg';
 import LoginButton from './LoginButton';
+import {RootState} from '../../redux/reducers/index';
 import Profile from './Profile';
-import {RootState} from '../../redux/reducers/authReducer';
 
-type Props = {
-  title: string;
-  style: Animated.WithAnimatedValue<StyleProp<ViewStyle>>;
-};
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Header = (props: Props) => {
+const Header = () => {
   const {loggedIn} = useSelector((state: RootState) => state.authReducer);
   const dispatch = useDispatch();
 
@@ -23,6 +17,7 @@ const Header = (props: Props) => {
       <View style={styles.logoContainer}>
         <Logo />
       </View>
+
       <View style={styles.userContainer}>
         {!loggedIn && (
           <LoginButton
@@ -30,6 +25,7 @@ const Header = (props: Props) => {
             onPress={() => dispatch({type: 'LOGIN'})}
           />
         )}
+
         <Profile
           loggedIn={loggedIn}
           online={loggedIn}
@@ -51,7 +47,6 @@ const styles = StyleSheet.create({
 
   logoContainer: {
     flex: 1,
-    // alignItems: 'center',
     justifyContent: 'center',
   },
 

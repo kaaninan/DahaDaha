@@ -11,6 +11,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import {theme} from '../../../../styles/theme';
 
 type Props = {
   id: number;
@@ -51,7 +52,9 @@ const Tag = (props: Props) => {
           styles.container,
           {
             borderColor:
-              props.selected && props.selectable ? '#F40000' : '#ECEEEF',
+              props.selected && props.selectable
+                ? theme.colors.primary
+                : theme.colors.border,
           },
         ]}
         activeOpacity={1}>
@@ -88,7 +91,7 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    fontFamily: 'Helvetica',
+    fontFamily: theme.font.primary,
     fontWeight: '400',
     fontSize: 12,
     paddingHorizontal: 10,

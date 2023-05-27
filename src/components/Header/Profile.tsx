@@ -5,8 +5,8 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-
 import ProfileIcon from '../../assets/icons/profile.svg';
+import {theme} from '../../styles/theme';
 
 type Props = {
   loggedIn: boolean;
@@ -42,7 +42,11 @@ const Profile = (props: Props) => {
         onPress={props.onPress}
         style={[
           styles.container,
-          {backgroundColor: props.loggedIn ? '#F40000' : '#1D1E1C'},
+          {
+            backgroundColor: props.loggedIn
+              ? theme.colors.primary
+              : theme.colors.dark,
+          },
         ]}>
         <ProfileIcon />
         {props.online && <View style={styles.badge} />}
@@ -69,8 +73,8 @@ const styles = StyleSheet.create({
     height: 12,
     borderRadius: 12,
     borderWidth: 2.18,
-    backgroundColor: '#009639',
-    borderColor: '#FFFFFF',
+    backgroundColor: theme.colors.success,
+    borderColor: theme.colors.light,
     position: 'absolute',
     top: 0,
     right: 0,

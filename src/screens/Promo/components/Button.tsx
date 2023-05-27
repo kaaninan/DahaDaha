@@ -5,6 +5,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import {theme} from '../../../styles/theme';
 
 type Props = {
   title: string;
@@ -51,14 +52,15 @@ const styles = StyleSheet.create({
   container: {
     height: 56,
     borderRadius: 100,
-    backgroundColor: '#F40000',
+    backgroundColor: theme.colors.primary,
     justifyContent: 'center',
   },
+
   text: {
     paddingHorizontal: 20,
-    fontFamily: 'Helvetica',
+    fontFamily: theme.font.primary,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: theme.colors.light,
     textAlign: 'center',
   },
 });

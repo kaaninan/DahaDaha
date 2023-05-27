@@ -7,18 +7,18 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import Carousel from 'react-native-reanimated-carousel';
-
-import Item from './Item';
 import {processColor} from 'react-native-reanimated';
 import {interpolateColor} from 'react-native-reanimated';
-import {Promotion} from '../../Explore';
+
+import Item from './Item';
+import {Promotion} from '../../../../types/types';
 
 const PAGE_WIDTH = Dimensions.get('window').width;
 
-interface Props {
+type Props = {
   navigation: any;
   data: Promotion[];
-}
+};
 
 const Index = (props: Props) => {
   const progressValue = useSharedValue<number>(0);

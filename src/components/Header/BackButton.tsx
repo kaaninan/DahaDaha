@@ -6,6 +6,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import BackArrow from '../../assets/icons/back.svg';
+import {theme} from '../../styles/theme';
 
 type Props = {
   onPress?: () => void;
@@ -53,6 +54,6 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#1D1E1C',
+    backgroundColor: theme.colors.dark,
   },
 });
