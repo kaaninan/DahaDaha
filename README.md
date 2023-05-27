@@ -1,15 +1,15 @@
 # DahaDaha Mobile App
 
-|        iOS         |        Android        |
-| :----------------: | :-------------------: |
-| ![](./ss-ios.jpeg) | ![](./ss-android.png) |
+|        iOS         |        Android        | Preview       |
+| :----------------: | :-------------------: | ------------- |
+| ![](./ss-ios.jpeg) | ![](./ss-android.png) | ![](./ss.gif) |
 
 
 ## Prerequisites
 
 - [Node.js > 16](https://nodejs.org) and npm (Recommended: Use [nvm](https://github.com/nvm-sh/nvm))
 - [Watchman](https://facebook.github.io/watchman)
-- [Xcode 12](https://developer.apple.com/xcode)
+- [Xcode 14](https://developer.apple.com/xcode)
 - [Cocoapods](https://cocoapods.org)
 - [JDK > 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
 - [Android Studio and Android SDK](https://developer.android.com/studio)
