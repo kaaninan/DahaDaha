@@ -16,11 +16,16 @@ import {Promotion} from '../../Explore';
 const PAGE_WIDTH = Dimensions.get('window').width;
 
 interface Props {
+  navigation: any;
   data: Promotion[];
 }
 
 const Index = (props: Props) => {
   const progressValue = useSharedValue<number>(0);
+
+  const navigate = (data: Promotion) => {
+    props.navigation.navigate('Promo', {data});
+  };
 
   return (
     <View style={styles.container}>
@@ -28,9 +33,6 @@ const Index = (props: Props) => {
         width={PAGE_WIDTH}
         style={{flex: 1}}
         loop={false}
-        pagingEnabled={true}
-        snapEnabled={true}
-        autoPlay={false}
         onProgressChange={(_, absoluteProgress) =>
           (progressValue.value = absoluteProgress)
         }
@@ -39,9 +41,12 @@ const Index = (props: Props) => {
           parallaxScrollingScale: 0.85,
           parallaxScrollingOffset: 70,
         }}
+        scrollAnimationDuration={400}
         data={props.data}
         renderItem={data => {
-          return <Item index={data.index} data={data.item} />;
+          return (
+            <Item index={data.index} data={data.item} onPress={navigate} />
+          );
         }}
       />
       {progressValue && (

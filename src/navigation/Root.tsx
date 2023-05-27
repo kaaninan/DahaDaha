@@ -25,7 +25,13 @@ export const AppStack = () => (
         headerShown: false,
       })}
     />
-    <Stack.Screen name={'Promo'} component={Promo} />
+    <Stack.Screen
+      name={'Promo'}
+      component={Promo}
+      options={({}) => ({
+        headerShown: false,
+      })}
+    />
   </Stack.Navigator>
 );
 
@@ -34,7 +40,9 @@ function Container() {
     <NavigationContainer
       theme={MyTheme}
       onReady={() => {
-        RNBootSplash.hide({fade: true});
+        setTimeout(() => {
+          RNBootSplash.hide();
+        }, 250);
       }}>
       <AppStack />
     </NavigationContainer>

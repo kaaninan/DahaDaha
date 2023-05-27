@@ -6,9 +6,8 @@ import {
   StyleSheet,
   Dimensions,
   View,
-  Text,
   TouchableOpacity,
-  Pressable,
+  Text,
 } from 'react-native';
 import {
   AnimateProps,
@@ -17,8 +16,9 @@ import {
   withTiming,
 } from 'react-native-reanimated';
 import Animated from 'react-native-reanimated';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
-import BackLayer from '../../../../assets/path132.svg';
+import BackLayer from '../../../../assets/backLayer.svg';
 import FastImage from 'react-native-fast-image';
 
 import {Promotion} from '../../Explore';
@@ -27,6 +27,7 @@ interface Props extends AnimateProps<ViewProps> {
   style?: StyleProp<ViewStyle>;
   index: number;
   data: Promotion;
+  onPress: (data: Promotion) => void;
 }
 
 const Item: React.FC<Props> = props => {
@@ -84,8 +85,10 @@ const Item: React.FC<Props> = props => {
     <Animated.View
       style={[styles.containerMain, animatedStyle]}
       {...animatedViewProps}>
-      <Pressable
+      <TouchableWithoutFeedback
+        containerStyle={{flex: 1}}
         style={{flex: 1}}
+        onPress={() => props.onPress(props.data)}
         onPressIn={onPressIn}
         onPressOut={onPressOut}>
         {/* Bottom Layer */}
@@ -164,7 +167,7 @@ const Item: React.FC<Props> = props => {
             </Text>
           </TouchableOpacity>
         </View>
-      </Pressable>
+      </TouchableWithoutFeedback>
     </Animated.View>
   );
 };

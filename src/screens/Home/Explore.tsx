@@ -48,7 +48,6 @@ export interface Promotion {
   ListButtonText: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Home = (props: Props) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [tags, setTags] = useState<TagState[]>();
@@ -173,7 +172,7 @@ const Home = (props: Props) => {
           </View>
 
           {/* CAROUSEL */}
-          <CarouselContainer data={promotions} />
+          <CarouselContainer data={promotions} navigation={props.navigation} />
         </>
       )}
     </View>
